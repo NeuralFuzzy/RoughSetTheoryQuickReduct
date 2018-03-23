@@ -76,7 +76,7 @@ def generate_new_dataset(row,l):
         x=[row[-1] for row in dataset]
         X=np.append(X, [[x[0]],[x[1]],[x[2]],[x[3]],[x[4]],[x[5]],[x[6]],[x[7]]], axis=1)
         X=np.array(X).tolist()
-        print("X {}".format(X))
+        #print("X {}".format(X))
         return X
         
       
@@ -87,28 +87,39 @@ for i in range(len(dataset[0])-1):
 # convert class column to integers
 str_column_to_int(dataset, len(dataset[0])-1)
 #print(dataset)
-#this is fuzzify inpput based on class belongin granulation
+#this is fuzzify input based on class belongin granulation
 dp=dependency(dataset,4)
-#print("dp{}".format(dp))
+
 n=4
 initial_val=[0,1,2,3]
 comb=combinations([0,1,2,3],3)
-while n>1:
+
+co=[i for i in combinations([0,1,2,3],3)]
+c=len(co)
+
+while n>1 :
         for row in  comb:
-                #print(row)
+                
                 data_X=generate_new_dataset(row,len(row))
                 #print(data_X)
                 dp_data_X=dependency(data_X,len(row))
-                #print("new dp{}".format(dp_data_X))
+                
                 if dp > dp_data_X:
+                        c=c-1                        
                         continue                
                 else:
                         n=n-1
+                        prev_row=row
+                        
                         break
-
-        #print(row)
+        if c == 0:
+                break
         comb=combinations(row,n)
-print("final reduct {}".format(row))
+        comb_temp=[i for i in combinations(row,n)]
+        c=len(comb_temp)
+        
+                
+print("final reduct {}".format(prev_row))
         
 
 
